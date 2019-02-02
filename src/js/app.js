@@ -6,7 +6,7 @@ const characters = [
   { name: 'мечник', health: 100 },
 ];
 
-const attacks = setUpAttacks(characters, 1, true, 30);
-// (id-героя, защита вкл/выкл, урон)
+const attacks = setUpAttacks(characters, 1, false, 30);
+// (массив персонажей, id-героя, защита вкл/выкл, урон)
 
 console.log(attacks);
