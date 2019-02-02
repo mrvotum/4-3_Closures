@@ -1,4 +1,4 @@
-import setUpAttacks from '../js/app';
+import setUpAttacks from '../js/fun-setUpAttacks';
 
 test('Защита выкл, урон лучнику', () => {
   const inputArr = [
@@ -10,12 +10,12 @@ test('Защита выкл, урон лучнику', () => {
   const inputShield = false;
   const inputDamage = 50;
 
-  const expected = [{"health": 100, "name": "маг"}, {"health": 50, "name": "лучник"}, {"health": 100, "name": "мечник"}]; // ожидает
+  const expected = [{ health: 100, name: 'маг' }, { health: 50, name: 'лучник' }, { health: 100, name: 'мечник' }]; // ожидает
   const received = setUpAttacks(inputArr, inputId, inputShield, inputDamage); // получает
   expect(received).toEqual(expected); // сравнивает
 });
 
-test('Защита вкл, урон лучнику, но примут все троя', () => {
+test('Защита вкл, урон лучнику, но примут все трои персонажа', () => {
   const inputArr = [
     { name: 'маг', health: 100 },
     { name: 'лучник', health: 100 },
@@ -25,7 +25,7 @@ test('Защита вкл, урон лучнику, но примут все т�
   const inputShield = true;
   const inputDamage = 60;
 
-  const expected = [{"health": 80, "name": "маг"}, {"health": 80, "name": "лучник"}, {"health": 80, "name": "мечник"}]; // ожидает
+  const expected = [{ health: 80, name: 'маг' }, { health: 80, name: 'лучник' }, { health: 80, name: 'мечник' }]; // ожидает
   const received = setUpAttacks(inputArr, inputId, inputShield, inputDamage); // получает
   expect(received).toEqual(expected); // сравнивает
 });
@@ -40,7 +40,7 @@ test('Защита вкл, урон лучнику, но примут два, о
   const inputShield = true;
   const inputDamage = 60;
 
-  const expected = [{"health": 0, "name": "маг"}, {"health": 70, "name": "лучник"}, {"health": 70, "name": "мечник"}]; // ожидает
+  const expected = [{ health: 0, name: 'маг' }, { health: 70, name: 'лучник' }, { health: 70, name: 'мечник' }]; // ожидает
   const received = setUpAttacks(inputArr, inputId, inputShield, inputDamage); // получает
   expect(received).toEqual(expected); // сравнивает
 });
@@ -55,7 +55,37 @@ test('Защита вкл, урон лучнику, урон не поделит
   const inputShield = true;
   const inputDamage = 60;
 
-  const expected = [{"health": 0, "name": "маг"}, {"health": 40, "name": "лучник"}, {"health": 0, "name": "мечник"}]; // ожидает
+  const expected = [{ health: 0, name: 'маг' }, { health: 40, name: 'лучник' }, { health: 0, name: 'мечник' }]; // ожидает
+  const received = setUpAttacks(inputArr, inputId, inputShield, inputDamage); // получает
+  expect(received).toEqual(expected); // сравнивает
+});
+
+test('Защита вкл, урон лучнику, урон делится не на цело, примут три персонажа', () => {
+  const inputArr = [
+    { name: 'маг', health: 100 },
+    { name: 'лучник', health: 100 },
+    { name: 'мечник', health: 100 },
+  ];
+  const inputId = 1;
+  const inputShield = true;
+  const inputDamage = 40;
+
+  const expected = [{ health: 87, name: 'маг' }, { health: 86, name: 'лучник' }, { health: 87, name: 'мечник' }]; // ожидает
+  const received = setUpAttacks(inputArr, inputId, inputShield, inputDamage); // получает
+  expect(received).toEqual(expected); // сравнивает
+});
+
+test('Защита вкл, урон лучнику, урон делится не на цело, примут два персонажа', () => {
+  const inputArr = [
+    { name: 'маг', health: 0 },
+    { name: 'лучник', health: 100 },
+    { name: 'мечник', health: 100 },
+  ];
+  const inputId = 1;
+  const inputShield = true;
+  const inputDamage = 19;
+
+  const expected = [{ health: 0, name: 'маг' }, { health: 90, name: 'лучник' }, { health: 91, name: 'мечник' }]; // ожидает
   const received = setUpAttacks(inputArr, inputId, inputShield, inputDamage); // получает
   expect(received).toEqual(expected); // сравнивает
 });
