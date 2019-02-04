@@ -6,8 +6,10 @@ export default function setUpAttacks(result, items, shield, damage) {
     const damagePart = damage - charactersLive.length * parseInt(damage / charactersLive.length);
     damage = parseInt(damage / charactersLive.length); // до целого
     for (let i = 0; i < result.length; i += 1) {
-      if (result[i].health > 0) {
+      if (result[i].health > 0 && result[i].health >= damage) {
         result[i].health -= damage;
+      } else if (result[i].health > 0 && result[i].health < damage) {
+        result[i].health = 0;
       }
     }
     if (damagePart !== 0) { // нужно для того, чтобы выполнялось условие:
@@ -16,9 +18,11 @@ export default function setUpAttacks(result, items, shield, damage) {
       result[items].health -= damagePart;
     }
     console.info(`Урон на ${charactersLive.length} героев: ${damage}, на основного: ${damagePart + damage}`);
-  } else {
+  } else if (result[items].health >= damage) {
     console.info(`Урон ${damage} нанесён: ${result[items].name}у`);
     result[items].health -= damage;
+  } else {
+    result[items].health = 0;
   }
 
   return result;

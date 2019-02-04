@@ -1,4 +1,4 @@
-import setUpAttacks from './fun-setUpAttacks.js';
+import setUpAttacks from './setUpAttacks.js';
 
 const characters = [
   { name: 'маг', health: 100 },
@@ -6,7 +6,7 @@ const characters = [
   { name: 'мечник', health: 100 },
 ];
 
-const attacks = setUpAttacks(characters, 1, false, 30);
+const attacks = setUpAttacks(characters, 1, true, 19);
 // (массив персонажей, id-героя, защита вкл/выкл, урон)
 
 console.log(attacks);
