@@ -1,51 +1,37 @@
-let attacks;
 const characters = [
-  { name: 'маг', health: 100 },
+  { name: 'маг', health: 0 },
   { name: 'лучник', health: 100 },
   { name: 'мечник', health: 100 },
 ];
 
-function setUpAttacks(shield) {
-  // return attacks = characters.map((item) => (damage) => item.health - damage);
-  return attacks = characters.map(function (item) {
-    // item == { name: 'маг', health: 100 } и тд
-    return function (damage) {
-      if (shield === false){
-        if (item.health > 0 && item.health >= damage) {
-          item.health -= damage;
-          return characters;
-        } else {
-          // если здоровья меньше, чем урона, то:
-          item.health = 0;
-          return characters;
-        }
-      } else { // при включенной защите
-        const charactersLive = characters.filter(whoLive => whoLive.health > 0);
-        const damagePart = damage - charactersLive.length * parseInt(damage / charactersLive.length);
-        damage = parseInt(damage / charactersLive.length); // до целого
-        for (let i = 0; i < characters.length; i += 1) {
-          if (characters[i].health > 0 && characters[i].health >= damage) {
-            characters[i].health -= damage;
-          } else if (characters[i].health > 0 && characters[i].health < damage) {
-            characters[i].health = 0;
-          }
-        }
-        if (damagePart !== 0) { // нужно для того, чтобы выполнялось условие:
-          // “если баллы атаки не делятся нацело на количество живых персонажей,
-          // то остаток достаётся тому, которого атакуют”
-          item.health -= damagePart;
-        }
-        console.info(`Урон на ${charactersLive.length} героев: ${damage}, на основного: ${damagePart + damage}`);
-      }
-      return characters;
-    };
-  });
+function damageWithHealthControl(character, damage) {
+  const c = character;
+  c.health = (c.health >= damage) ? c.health - damage : 0;
 }
 
-setUpAttacks(false);
-console.log(attacks[1](25));
-console.log(attacks[1](25));
-console.log(attacks[1](25));
-console.log(attacks[1](25));
+function setUpAttacks(characters, shield = true) {
+  return characters.map(character => (
+    // item == { name: 'маг', health: 100 } и тд
+    function (damage) {
+      if (shield === false) {
+        damageWithHealthControl(character, damage);
+      } else {
+        // при включенной защите
+        const charactersLive = characters.filter(item => item.health > 0);
+        const damageRemainder = damage % charactersLive.length;
+        const damagePart = (damage - damageRemainder) / charactersLive.length; // до целогo
+        for (let i = 0; i < charactersLive.length; i += 1) {
+          damageWithHealthControl(charactersLive[i], damagePart);
+        }
+        damageWithHealthControl(character, damageRemainder);
+        console.info(`Весь урон: ${damage}, на ${charactersLive.length} героев по: ${damagePart}, на основного: ${damagePart + damageRemainder}`);
+      }
+    }
+  ));
+}
 
-export { setUpAttacks, attacks };
+const attacks = setUpAttacks(characters, true);
+attacks[1](30);
+console.log(characters);
+
+export default setUpAttacks;
